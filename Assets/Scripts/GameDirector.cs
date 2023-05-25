@@ -6,9 +6,16 @@ using UnityEngine.SceneManagement;
 
 public class GameDirector : MonoBehaviour
 {
-
+    //ゲーム起動などのシステム管理
+    #region
     //ゲームのオンオフの管理
     bool gameSwitch = true;
+    bool EndSwitch = false;
+    float SwichCount = 0;//スタートのカウントダウン
+    GameObject MessageText;//ゲーム終了時のテキスト
+    float resultCount;//次のシーンに移るまでの時間調節
+    #endregion
+
 
     //Enemyの管理
     #region
@@ -29,6 +36,7 @@ public class GameDirector : MonoBehaviour
     #region
     GameObject timeGauge;//時間経過を表すゲージの情報
     float Score;//スコア（距離）の記録
+    int ResultScore;
     GameObject ScoreText;//スコアの表示用Textの情報
     #endregion
 
@@ -41,11 +49,12 @@ public class GameDirector : MonoBehaviour
     [Header("制限時間の設定")]
     [SerializeField]
     float countTime;//時間調整用　ここの値で制限時間がかわる。100なら100秒。30なら30秒。
+
+    [SerializeField]
+    float HitTime;
     #endregion
 
 
-    
-    float resultCount;
 
 
     // Start is called before the first frame update
@@ -53,14 +62,17 @@ public class GameDirector : MonoBehaviour
     {
         timeGauge = GameObject.Find("TimeGauge");
         ScoreText = GameObject.Find("Score");
+        MessageText = GameObject.Find("Message");
+        EndSwitch = false;
     }
 
     // Update is called once per frame
     void Update()
     {
 
-  
-        if (gameSwitch) //ゲーム起動
+        GameStart();
+
+        if (gameSwitch && SwichCount > 5) //ゲーム起動
         {
 
             ScoreRecord();
@@ -68,63 +80,100 @@ public class GameDirector : MonoBehaviour
             DecreaseTime();
 
         }
-        else
+
+        else if (!gameSwitch && EndSwitch)
         {
-
-            resultCount = Time.deltaTime;
-
-            if(resultCount >= 3)
-            {
-                resultCount = 0;
-                SceneManager.LoadScene("Result");
-            }
-
-
-
+            GameEnd();
         }
-
-        
 
     }
 
 
+
+    private void GameStart()
+    {
+        #region
+        if (!EndSwitch)
+        {
+            SwichCount += Time.deltaTime;
+
+            if (SwichCount > 1 && SwichCount <=  4)
+            {
+                MessageText.GetComponent<Text>().text = "Ready...";
+            }
+            else if (SwichCount > 4 && SwichCount <= 5)
+            {
+                MessageText.GetComponent<Text>().text = "Start!!";
+            }
+            else if(SwichCount > 5)
+            {
+                MessageText.GetComponent<Text>().text = " ";
+            }
+        }
+        #endregion
+    }
+
+
+
+    private void GameEnd()
+    {
+        #region
+        MessageText.GetComponent<Text>().text = "Finish!!";
+        resultCount += Time.deltaTime;
+
+        if (resultCount >= 3)
+        {
+            SceneManager.LoadScene("Result");
+            resultCount = 0;
+        }
+        #endregion
+    }
+
     public void ScoreRecord()　//スコア記録用メソッド
     {
+        #region
         Score += Time.deltaTime;
         ScoreText.GetComponent<Text>().text = Score.ToString("F2") + " Km";
+
+        ResultScore = (int)Score;
+
+        PlayerPrefs.SetInt("SCORE", ResultScore);
+        PlayerPrefs.Save();
+        #endregion
     }
 
 
 
     public void DecreaseTime()　//ゲーム時間管理のメソッド
     {
+        #region
         timeGauge.GetComponent<Image>().fillAmount -= 1.0f / countTime * Time.deltaTime;　//ゲージUIの時間管理
 
         endTime -= 1.0f / countTime * Time.deltaTime;　//内部の時間管理
 
         if (endTime < 0)　//制限時間がなくなったら
         {
-
             gameSwitch = false;　//ゲームを止める
-
+            EndSwitch = true;//GameEnd()の起動
         }
 
-        Debug.Log(endTime);　//endTimeの確認
+        Debug.Log(endTime); //endTimeの確認
+        #endregion
     }
 
 
 
     public void EnemyHit()　//敵被弾時のメソッド
     {
-        endTime -= 1.0f / countTime;
-        timeGauge.GetComponent<Image>().fillAmount -= 1f / countTime;
+        endTime -= HitTime / countTime;
+        timeGauge.GetComponent<Image>().fillAmount -= HitTime / countTime;
     }
 
 
 
     private void EyeEnemy()  //EyeEnemyの生成管理
     {
-
+        #region
         delta += Time.deltaTime;
 
         if (delta > span)
@@ -134,5 +183,6 @@ public class GameDirector : MonoBehaviour
             go = Instantiate(EnemyPrefab);
             go.transform.position = new Vector2(rndPosX, 6);
         }
+        #endregion
     }
 }

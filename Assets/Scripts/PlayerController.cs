@@ -27,14 +27,13 @@ public class PlayerController : MonoBehaviour
     float moveSpeed;// プレイヤーの移動速度
     float hInput;// Horizontal
     float vInput;// Vertical
-
     Vector2 Pos; //プレイヤーの位置情報
 
     [SerializeField]
     float minX, maxX; //横移動の上限
 
     [SerializeField]
-    float minY,maxY; //縦移動の上限
+    float minY, maxY; //縦移動の上限
 
     #endregion
 
@@ -50,10 +49,6 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
 
-        Pos = transform.position;
-
-        Pos.x = Mathf.Clamp(Pos.x, minX, maxX);
-        Pos.y = Mathf.Clamp(Pos.y, minY, maxY);
 
 
         PlayerMover();
@@ -74,15 +69,27 @@ public class PlayerController : MonoBehaviour
     }
 
 
+
     public void PlayerMover() //プレイヤーの制御
     {
 
-        transform.Translate(hInput, vInput, 0);
-
         hInput = Input.GetAxis("Horizontal") * moveSpeed * Time.deltaTime;
         vInput = Input.GetAxis("Vertical") * moveSpeed * Time.deltaTime;
+        transform.Translate(hInput,vInput,0);
+
+
+        Pos = transform.position;
+
+
+        Pos.x = Mathf.Clamp(Pos.x, minX, maxX);
+        Pos.y = Mathf.Clamp(Pos.y, minY, maxY);
+
+        transform.position = Pos;
+
+
 
     }
+
 
 
     private void Shot() //弾の制御
@@ -93,6 +100,8 @@ public class PlayerController : MonoBehaviour
             Blast.transform.position = new Vector2(transform.position.x, transform.position.y + 1);
         }
     }
+
+
 
     private void PlayerAnimation()　//プレイヤーのアニメーション制御
     {
@@ -116,4 +125,3 @@ public class PlayerController : MonoBehaviour
     }
 
 }
-

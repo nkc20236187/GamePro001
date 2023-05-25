@@ -7,10 +7,8 @@ using UnityEngine;
 public class EnemyController : MonoBehaviour
 {
 
-    public float EnemySpeed;//敵のスピード
-
     GameObject gameDirector;//GameDirectorの情報
-
+    public float EnemySpeed;//敵のスピード
 
 
     void Start()
@@ -30,12 +28,14 @@ public class EnemyController : MonoBehaviour
 
     public void EnemyMover()  //敵の動きの制御
     {
+        #region
         transform.Translate(0, -EnemySpeed * Time.deltaTime, 0);　//EnemySpeedの設定の速さで落ちる
 
         if (transform.position.y < -6) //画面外に行ったら削除
         {
             Destroy(gameObject);
         }
+        #endregion
     }
 
 

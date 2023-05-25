@@ -16,7 +16,7 @@ public class TitleDirector : MonoBehaviour
     void Update()
     {
 
-        if(Input.GetKeyDown(KeyCode.Z) || Input.GetButtonDown("Fire2")) 
+        if(Input.GetKeyDown(KeyCode.Z) || Input.GetButtonDown("start")) 
         {
             SceneManager.LoadScene("Main");
         }
