@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Blast : MonoBehaviour
 {
-
+    //’e‘¬
     [SerializeField]
     float blastSpeed;
 
@@ -28,10 +28,12 @@ public class Blast : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if( collision.gameObject.tag == "Enemy")
+        if( collision.gameObject.tag == "Enemy")//“G‚É“–‚½‚Á‚½Žž
         {
+            Destroy(collision.gameObject);
             Destroy(gameObject);
         }
     }
+
 
 }

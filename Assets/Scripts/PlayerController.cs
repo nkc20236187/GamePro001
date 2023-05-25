@@ -4,74 +4,116 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public GameObject blastPrefab;
-    GameObject shot;
+    //GameDirectorスクリプトの情報
     GameObject gameDirector;
-    public float moveSpeed;
-    float hInput;
-    float vInput;
 
+
+    //Animatorの情報
     Animator anim;
 
-    Vector2 Pos;
+
+    //弾の情報管理
+    #region
+    public GameObject blastPrefab;
+    GameObject Blast;
+    #endregion
+
+
+    //Playerの情報
+    #region
+
+    [Header("移動速度設定")]
+    [SerializeField]
+    float moveSpeed;// プレイヤーの移動速度
+    float hInput;// Horizontal
+    float vInput;// Vertical
+
+    Vector2 Pos; //プレイヤーの位置情報
 
     [SerializeField]
-    float minX, maxX;
+    float minX, maxX; //横移動の上限
 
     [SerializeField]
-    float minY,maxY;
+    float minY,maxY; //縦移動の上限
 
-    // Start is called before the first frame update
+    #endregion
+
+
     void Start()
     {
         anim = GetComponent<Animator>();
         gameDirector = GameObject.Find("GameDirector");
     }
 
-    // Update is called once per frame
+
+
     void Update()
     {
+
         Pos = transform.position;
 
         Pos.x = Mathf.Clamp(Pos.x, minX, maxX);
         Pos.y = Mathf.Clamp(Pos.y, minY, maxY);
 
 
-        if (Input.GetButtonDown("Fire2"))
+        PlayerMover();
+        Shot();
+        PlayerAnimation();
+
+    }
+
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.tag == "Enemy") //敵に当たった時
         {
-            shot = Instantiate(blastPrefab);
-            shot.transform.position = new Vector2(transform.position.x, transform.position.y + 1);
+            Debug.Log("hit");
+            gameDirector.GetComponent<GameDirector>().EnemyHit(); //EnemyHitメソッドを呼び出す。中身は「制限時間の減少」
+            Destroy(other.gameObject); //接触したオブジェクトの削除
         }
+    }
+
+
+    public void PlayerMover() //プレイヤーの制御
+    {
+
+        transform.Translate(hInput, vInput, 0);
 
         hInput = Input.GetAxis("Horizontal") * moveSpeed * Time.deltaTime;
         vInput = Input.GetAxis("Vertical") * moveSpeed * Time.deltaTime;
 
-        transform.Translate(hInput, vInput, 0);
+    }
 
 
-        if (hInput > 0)
+    private void Shot() //弾の制御
+    {
+        if (Input.GetButtonDown("Blast"))
+        {
+            Blast = Instantiate(blastPrefab);
+            Blast.transform.position = new Vector2(transform.position.x, transform.position.y + 1);
+        }
+    }
+
+    private void PlayerAnimation()　//プレイヤーのアニメーション制御
+    {
+
+        if (hInput > 0) //→に動いたとき
         {
             anim.SetBool("Right", true);
         }
-        else if (hInput < 0)
+
+        else if (hInput < 0) //←に動いたとき
         {
             anim.SetBool("Left", true);
         }
-        else
+
+        else　//それ以外
         {
             anim.SetBool("Left", false);
             anim.SetBool("Right", false);
         }
+
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.gameObject.tag == "Enemy")
-        {
-            Debug.Log("hit");
-            gameDirector.GetComponent<GameDirector>().EnemyHit();
-            Destroy(other.gameObject);
-        }
-    }
 }
 

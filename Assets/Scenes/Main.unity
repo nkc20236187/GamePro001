@@ -763,7 +763,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blastPrefab: {fileID: 7422462691262558465, guid: d0ee453f55329e443bec79a3edbbc7b4, type: 3}
-  moveSpeed: 5
+  moveSpeed: 10
   minX: -9.6
   maxX: 9.6
   minY: -4
@@ -861,8 +861,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EnemyPrefab: {fileID: 8727362909870291559, guid: 1bfc9838a8f35a542a4679d1dbd9006a, type: 3}
   span: 0.5
-  endTime: 1
-  countTime: 10
+  countTime: 30
 --- !u!4 &1873781631
 Transform:
   m_ObjectHideFlags: 0
