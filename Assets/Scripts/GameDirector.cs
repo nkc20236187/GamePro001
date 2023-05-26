@@ -38,6 +38,8 @@ public class GameDirector : MonoBehaviour
     float Score;//スコア（距離）の記録
     int ResultScore;
     GameObject ScoreText;//スコアの表示用Textの情報
+
+    public int killScore = 0;
     #endregion
 
 
@@ -140,6 +142,12 @@ public class GameDirector : MonoBehaviour
         PlayerPrefs.SetInt("SCORE", ResultScore);
         PlayerPrefs.Save();
         #endregion
+    }
+
+    public void BlastHit()
+    {
+        killScore++;
+        Debug.Log(killScore);
     }
 
 

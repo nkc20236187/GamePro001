@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class Blast : MonoBehaviour
 {
+    GameObject gameDirector;
+
     //’e‘¬
     [SerializeField]
     float blastSpeed;
@@ -12,7 +14,7 @@ public class Blast : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        gameDirector = GameObject.Find("GameDirector");
     }
 
     // Update is called once per frame
@@ -30,6 +32,7 @@ public class Blast : MonoBehaviour
     {
         if( collision.gameObject.tag == "Enemy")//“G‚É“–‚½‚Á‚½Žž
         {
+            gameDirector.GetComponent<GameDirector>().BlastHit();
             Destroy(collision.gameObject);
             Destroy(gameObject);
         }
