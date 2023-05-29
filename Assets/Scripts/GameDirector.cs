@@ -31,6 +31,9 @@ public class GameDirector : MonoBehaviour
     int rndPosX;//敵の出現位置(X)の情報
     #endregion
 
+    //バルーンの管理
+    public GameObject BalloonPrefab;
+
 
     //スコア記録用
     #region
@@ -78,7 +81,7 @@ public class GameDirector : MonoBehaviour
         {
 
             ScoreRecord();
-            EyeEnemy();
+            Creator();
             DecreaseTime();
 
         }
@@ -177,20 +180,49 @@ public class GameDirector : MonoBehaviour
         timeGauge.GetComponent<Image>().fillAmount -= HitTime / countTime;
     }
 
+    public void BalloonHit()
+    {
+        endTime += HitTime / countTime;
+        timeGauge.GetComponent<Image>().fillAmount += HitTime / countTime;
+    }
 
 
     private void EyeEnemy()  //EyeEnemyの生成管理
     {
         #region
+        rndPosX = Random.Range(-9, 10);
+        go = Instantiate(EnemyPrefab);
+        go.transform.position = new Vector2(rndPosX, 6);
+        #endregion
+    }
+
+
+    public void BonusBalloon()
+    {
+        rndPosX = Random.Range(-9, 10);
+        go = Instantiate(BalloonPrefab);
+        go.transform.position = new Vector2(rndPosX, 6);
+    }
+
+    public void Creator()
+    {
         delta += Time.deltaTime;
 
         if (delta > span)
         {
-            delta = 0f;
-            rndPosX = Random.Range(-9, 10);
-            go = Instantiate(EnemyPrefab);
-            go.transform.position = new Vector2(rndPosX, 6);
+
+            delta = 0;
+
+            int rndX = Random.Range(0, 7);
+
+            if(rndX == 0)
+            {
+                BonusBalloon();
+            }
+            else
+            {
+                EyeEnemy();
+            }
         }
-        #endregion
     }
 }

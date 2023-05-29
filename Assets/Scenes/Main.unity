@@ -825,8 +825,8 @@ Transform:
   m_GameObject: {fileID: 1359349328}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3, y: 3, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 2.5, y: 2.5, z: 0.8333334}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
@@ -942,6 +942,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EnemyPrefab: {fileID: 8727362909870291559, guid: 1bfc9838a8f35a542a4679d1dbd9006a, type: 3}
   span: 0.5
+  BalloonPrefab: {fileID: 7784957603607762558, guid: e410f9c6119920d4baf05ec026a4e234, type: 3}
   killScore: 0
   countTime: 100
   HitTime: 1

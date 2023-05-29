@@ -72,7 +72,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.tag == "Enemy") //敵に当たった時
+        if (other.gameObject.tag == "EyeEnemy") //敵に当たった時
         {
             Debug.Log("hit");
             gameDirector.GetComponent<GameDirector>().EnemyHit(); //EnemyHitメソッドを呼び出す。中身は「制限時間の減少」

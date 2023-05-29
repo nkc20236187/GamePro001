@@ -30,9 +30,15 @@ public class Blast : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if( collision.gameObject.tag == "Enemy")//“G‚É“–‚½‚Á‚½Žž
+        if( collision.gameObject.tag == "EyeEnemy")//–Ú‚Ì“G‚É“–‚½‚Á‚½Žž
         {
             gameDirector.GetComponent<GameDirector>().BlastHit();
+            Destroy(collision.gameObject);
+            Destroy(gameObject);
+        }
+        else if( collision.gameObject.tag == "Balloon")
+        {
+            gameDirector.GetComponent<GameDirector>().BalloonHit();
             Destroy(collision.gameObject);
             Destroy(gameObject);
         }

@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Enemy
   - Blast
+  - Balloon
+  - EyeEnemy
   layers:
   - Default
   - TransparentFX
